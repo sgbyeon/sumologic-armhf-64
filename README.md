@@ -18,6 +18,14 @@ yum install system-lsb
 ./arm-sumologic-agent-preinstall.sh
 ```
 
+### libsigar
+1. It's already built. you can check it in the libsigar-aarch64-linux directory.
+2. If you want to create it again, please proceed as follows.
+```bash
+cd libsigar-aarch64-linux
+./autogen.sh
+```
+
 ### Agent installation
 1. modify agent.config
 ```bash
