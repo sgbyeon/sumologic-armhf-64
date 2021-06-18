@@ -15,7 +15,12 @@ err_report() {
 trap 'err_report $LINENO' ERR
 
 if [ ! -f "$patch_file_1" ];then
-    echo "Not found patch file"
+    echo "Not found $patch_file_1 file"
+    exit 1
+fi
+
+if [ ! -f "$patch_file_2" ];then
+    echo "Not found $patch_file_2 file"
     exit 1
 fi
 
