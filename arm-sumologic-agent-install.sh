@@ -1,8 +1,10 @@
 #!/bin/bash
 
+cwd=$(pwd)
 collector_download_link="https://collectors.us2.sumologic.com/rest/download/tar"
 collector_file_name="SumoCollector.tar.gz"
 tanuki_wrapper_download_link="https://download.tanukisoftware.com/wrapper/3.5.45/wrapper-linux-armhf-64-3.5.45.tar.gz"
+sigar_dir="$cwd/libsigar-aarch64-linux"
 
 err_report() {
     echo "Error on line $1"
@@ -10,6 +12,8 @@ err_report() {
 }
 
 trap 'err_report $LINENO' ERR
+
+[ ! -d $sigar_dir ] && err_report "$LINENO : not found sigar dir"
 
 [ ! -f agent.config ] && err_report "$LINENO : not found agent.config"
 source agent.config
@@ -34,7 +38,7 @@ fi
 wget $tanuki_wrapper_download_link
 tar -zxpf wrapper-linux-armhf-64-3.5.45.tar.gz
 cp wrapper-linux-armhf-64-3.5.45/bin/wrapper .
-cp wrapper-linux-armhf-64-3.5.45/lib/libwrapper.so 19.338-5/bin/native/lib/
+cp wrapper-linux-armhf-64-3.5.45/lib/libwrapper.so $version/bin/native/lib/
 
 [[ $(rpm -qa java-*-openjdk) ]] || yum install java-1.8.0-openjdk -y
 
@@ -54,6 +58,10 @@ chmod 755 collector
 chmod 755 wrapper
 
 ./collector install
+
+/bin/cp -fv $sigar_dir/libsigar-aarch64-linux.so /opt/sumocollector/$version/bin/native/lib/
+/bin/cp -fv $sigar_dir/sigar.jar /opt/sumocollector/$version/bin/native/lib/
+
 systemctl daemon-reload
 systemctl enable collector.service
 systemctl start collector.service

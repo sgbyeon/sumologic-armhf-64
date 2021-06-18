@@ -1,0 +1,14 @@
+--- ArchNameTask.java	2010-04-28 23:19:25.000000000 +0000
++++ ArchNameTask.java.new	2021-06-18 05:33:09.587812560 +0000
+@@ -74,11 +74,6 @@
+ 
+         if (ArchName.is64()) {
+             getProject().setProperty("jni.arch64", "true");
+-            if (ArchLoader.IS_LINUX) {
+-                if (!osArch.equals("ia64")) {
+-                    getProject().setProperty("jni.gccm", "-m64");
+-                }
+-            }
+         }
+         else {
+             if (ArchLoader.IS_LINUX && osArch.equals("s390")) {
